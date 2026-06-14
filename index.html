@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Galeri Foto Profil</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --cream:#F7F3EE;--ink:#1A1510;--sand:#D4C4B0;
+      --accent:#8B6F47;--warm:#FDFAF6;--muted:#8A7E72;--gold:#C9A96E;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden}
+
+    /* ── NAV ── */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:200;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:18px 60px;
+      backdrop-filter:blur(14px);background:rgba(247,243,238,.9);
+      border-bottom:1px solid rgba(212,196,176,.35);
+    }
+    .nav-logo{font-family:'Playfair Display',serif;font-size:20px;color:var(--ink);text-decoration:none}
+    .nav-links{display:flex;gap:32px;list-style:none}
+    .nav-links a{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+    .nav-links a:hover{color:var(--accent)}
+    .nav-admin{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);text-decoration:none;border:1px solid var(--gold);padding:6px 14px;transition:all .2s}
+    .nav-admin:hover{background:var(--gold);color:var(--ink)}
+
+    /* ── HERO ── */
+    .hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr}
+    .hero-left{background:var(--ink);display:flex;flex-direction:column;justify-content:center;padding:100px 60px 60px;position:relative;overflow:hidden}
+    .hero-left::before{content:'';position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(201,169,110,.1) 0%,transparent 70%);top:-120px;right:-120px}
+    .eyebrow{font-size:11px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:24px}
+    .hero-name{font-family:'Playfair Display',serif;font-size:clamp(44px,5vw,70px);color:var(--warm);line-height:1.05;margin-bottom:18px}
+    .hero-tagline{font-size:15px;color:var(--sand);line-height:1.75;max-width:340px;margin-bottom:48px}
+    .hero-stats{display:flex;gap:40px}
+    .stat .num{font-family:'Playfair Display',serif;font-size:34px;color:var(--gold);line-height:1}
+    .stat .lbl{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
+    /* Hero carousel */
+    .hero-right{position:relative;overflow:hidden;background:#111}
+    .hero-carousel{width:100%;height:100%;position:relative}
+    .hero-slide{position:absolute;inset:0;opacity:0;transition:opacity .8s ease}
+    .hero-slide.active{opacity:1}
+    .hero-slide img{width:100%;height:100%;object-fit:cover;filter:grayscale(8%)}
+    .hero-overlay{position:absolute;bottom:0;left:0;right:0;padding:40px;background:linear-gradient(transparent,rgba(26,21,16,.65))}
+    .hero-photo-label{color:var(--warm);font-size:13px;letter-spacing:1px}
+    .hero-dots{position:absolute;bottom:20px;right:24px;display:flex;gap:6px}
+    .hero-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.35);cursor:pointer;transition:all .3s}
+    .hero-dot.active{background:var(--gold);width:20px;border-radius:3px}
+
+    /* ── FILTER ── */
+    .filter-bar{padding:48px 60px 0;display:flex;gap:10px;flex-wrap:wrap;background:var(--warm)}
+    .filter-btn{padding:9px 22px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;border:1px solid var(--sand);background:transparent;color:var(--muted);cursor:pointer;transition:all .25s}
+    .filter-btn.active,.filter-btn:hover{background:var(--ink);color:var(--warm);border-color:var(--ink)}
+
+    /* ── GALLERY GRID ── */
+    .gallery-section{padding:40px 60px 120px;background:var(--warm)}
+    .section-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:48px}
+    .section-title{font-family:'Playfair Display',serif;font-size:clamp(28px,3vw,44px);line-height:1.1}
+    .section-title span{display:block;color:var(--gold)}
+    .section-desc{max-width:300px;font-size:13px;color:var(--muted);line-height:1.7;text-align:right}
+    .photo-count{font-size:13px;color:var(--gold);margin-top:4px}
+
+    .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .gallery-card{position:relative;background:var(--sand);aspect-ratio:3/4;overflow:hidden;cursor:pointer}
+    .gallery-card.hidden{display:none}
+
+    /* ── CARD CAROUSEL ── */
+    .card-track{display:flex;height:100%;transition:transform .45s cubic-bezier(.4,0,.2,1)}
+    .card-slide{min-width:100%;height:100%;flex-shrink:0}
+    .card-slide img{width:100%;height:100%;object-fit:cover;display:block}
+
+    /* Card nav arrows */
+    .card-btn{
+      position:absolute;top:50%;transform:translateY(-50%);
+      background:rgba(26,21,16,.55);border:none;color:#fff;
+      width:32px;height:40px;cursor:pointer;font-size:18px;
+      display:flex;align-items:center;justify-content:center;
+      opacity:0;transition:opacity .25s;z-index:10;
+      backdrop-filter:blur(4px);
+    }
+    .card-btn-prev{left:0;border-radius:0 2px 2px 0}
+    .card-btn-next{right:0;border-radius:2px 0 0 2px}
+    .gallery-card:hover .card-btn{opacity:1}
+
+    /* Dot indicators on card */
+    .card-dots{
+      position:absolute;bottom:52px;left:50%;transform:translateX(-50%);
+      display:flex;gap:5px;z-index:10;
+    }
+    .card-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.45);cursor:pointer;transition:all .25s}
+    .card-dot.active{background:#fff;width:14px;border-radius:2.5px}
+
+    /* Card overlay info */
+    .card-overlay{
+      position:absolute;bottom:0;left:0;right:0;
+      background:linear-gradient(transparent,rgba(26,21,16,.8));
+      padding:20px 16px 14px;z-index:5;
+      transform:translateY(4px);transition:transform .3s;
+    }
+    .gallery-card:hover .card-overlay{transform:translateY(0)}
+    .card-title{font-family:'Playfair Display',serif;font-size:15px;color:#fff;margin-bottom:2px}
+    .card-meta{font-size:11px;letter-spacing:.8px;color:var(--gold)}
+    .card-caption{font-size:11px;color:rgba(255,255,255,.65);margin-top:3px;min-height:14px}
+
+    /* Photo counter badge */
+    .card-count-badge{
+      position:absolute;top:10px;right:10px;
+      background:rgba(26,21,16,.65);backdrop-filter:blur(4px);
+      color:#fff;font-size:10px;letter-spacing:.5px;
+      padding:3px 8px;z-index:10;
+    }
+    .featured-badge{
+      position:absolute;top:10px;left:10px;
+      background:var(--gold);color:var(--ink);
+      font-size:9px;letter-spacing:1px;text-transform:uppercase;
+      padding:3px 8px;z-index:10;
+    }
+
+    .empty-state{grid-column:1/-1;padding:80px;text-align:center;color:var(--muted);font-size:15px}
+
+    /* ── ABOUT ── */
+    .about-strip{display:grid;grid-template-columns:1fr 1fr;min-height:55vh}
+    .about-img{position:relative;overflow:hidden}
+    .about-img img{width:100%;height:100%;object-fit:cover}
+    .about-content{background:var(--ink);padding:80px 70px;display:flex;flex-direction:column;justify-content:center}
+    .about-eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:24px}
+    .about-title{font-family:'Playfair Display',serif;font-size:36px;color:var(--warm);margin-bottom:20px;line-height:1.2}
+    .about-body{font-size:14px;color:var(--sand);line-height:1.85;margin-bottom:36px}
+    .about-tags{display:flex;flex-wrap:wrap;gap:10px}
+    .tag{padding:7px 16px;border:1px solid rgba(212,196,176,.3);color:var(--sand);font-size:11px;letter-spacing:1px;text-transform:uppercase}
+
+    /* ── CONTACT ── */
+    .contact-section{padding:100px 60px;text-align:center}
+    .contact-title{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,52px);margin-bottom:16px}
+    .contact-sub{font-size:14px;color:var(--muted);margin-bottom:44px}
+    .contact-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+    .btn{display:inline-block;padding:15px 38px;font-size:12px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;transition:all .3s}
+    .btn-primary{background:var(--ink);color:var(--warm)}
+    .btn-primary:hover{background:var(--accent)}
+    .btn-outline{border:1px solid var(--ink);color:var(--ink)}
+    .btn-outline:hover{background:var(--ink);color:var(--warm)}
+
+    /* ── LIGHTBOX ── */
+    .lightbox{position:fixed;inset:0;z-index:9999;background:rgba(10,8,6,.97);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .35s}
+    .lightbox.active{opacity:1;pointer-events:all}
+
+    .lb-inner{position:relative;width:90vw;max-width:1100px;display:flex;flex-direction:column;align-items:center;gap:20px}
+
+    /* Main image area */
+    .lb-img-wrap{position:relative;width:100%;overflow:hidden}
+    .lb-track{display:flex;transition:transform .45s cubic-bezier(.4,0,.2,1)}
+    .lb-slide{min-width:100%;display:flex;justify-content:center}
+    .lb-slide img{max-height:72vh;max-width:100%;object-fit:contain;display:block;user-select:none}
+
+    /* Lightbox arrows */
+    .lb-arrow{
+      position:absolute;top:50%;transform:translateY(-50%);
+      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+      color:rgba(255,255,255,.8);font-size:28px;width:48px;height:56px;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;transition:all .2s;z-index:10;
+    }
+    .lb-arrow:hover{background:rgba(201,169,110,.25);border-color:var(--gold);color:var(--gold)}
+    .lb-arrow-prev{left:-60px}
+    .lb-arrow-next{right:-60px}
+
+    /* Thumbnails strip */
+    .lb-thumbs{display:flex;gap:8px;overflow-x:auto;padding:4px 0;max-width:100%;scrollbar-width:thin;scrollbar-color:var(--gold) transparent}
+    .lb-thumbs::-webkit-scrollbar{height:3px}
+    .lb-thumbs::-webkit-scrollbar-thumb{background:var(--gold)}
+    .lb-thumb{width:64px;height:48px;object-fit:cover;cursor:pointer;opacity:.45;border:2px solid transparent;transition:all .25s;flex-shrink:0}
+    .lb-thumb.active{opacity:1;border-color:var(--gold)}
+
+    /* Caption + meta */
+    .lb-caption{text-align:center;color:var(--sand)}
+    .lb-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--warm);margin-bottom:4px}
+    .lb-meta{font-size:12px;letter-spacing:1px;color:var(--gold)}
+    .lb-caption-text{font-size:13px;color:var(--muted);margin-top:4px;min-height:18px}
+    .lb-counter{font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:6px}
+
+    /* Close */
+    .lb-close{position:fixed;top:24px;right:32px;font-size:34px;color:var(--sand);cursor:pointer;background:none;border:none;line-height:1;transition:color .2s;z-index:10001}
+    .lb-close:hover{color:var(--gold)}
+
+    /* ── FOOTER ── */
+    footer{background:var(--ink);padding:36px 60px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(212,196,176,.1)}
+    .footer-logo{font-family:'Playfair Display',serif;font-size:19px;color:var(--warm)}
+    .footer-copy{font-size:12px;color:var(--muted)}
+    .footer-gh{font-size:12px;color:var(--gold);text-decoration:none;letter-spacing:1px}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:900px){
+      nav{padding:15px 20px}
+      .nav-links{display:none}
+      .hero{grid-template-columns:1fr}
+      .hero-left{padding:90px 24px 50px;min-height:52vh}
+      .hero-right{min-height:48vh}
+      .filter-bar{padding:28px 20px 0}
+      .gallery-section{padding:28px 20px 80px}
+      .section-header{flex-direction:column;align-items:flex-start;gap:12px}
+      .section-desc{text-align:left;max-width:100%}
+      .gallery-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+      .lb-arrow-prev{left:-4px}
+      .lb-arrow-next{right:-4px}
+      .lb-arrow{width:38px;height:44px;font-size:22px}
+      .about-strip{grid-template-columns:1fr}
+      .about-img{min-height:260px}
+      .about-content{padding:50px 24px}
+      .contact-section{padding:70px 24px}
+      footer{flex-direction:column;gap:12px;text-align:center;padding:28px 20px}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#" id="nav-logo">Galeri</a>
+  <ul class="nav-links">
+    <li><a href="#galeri">Galeri</a></li>
+    <li><a href="#tentang">Tentang</a></li>
+    <li><a href="#kontak">Kontak</a></li>
+  </ul>
+  <a class="nav-admin" href="admin.html">⚙ Admin</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="eyebrow">Galeri Foto Profil</p>
+    <h1 class="hero-name" id="hero-name">Memuat…</h1>
+    <p class="hero-tagline" id="hero-tagline"></p>
+    <div class="hero-stats">
+      <div class="stat"><div class="num" id="s-cards">0</div><div class="lbl">Momen</div></div>
+      <div class="stat"><div class="num" id="s-photos">0</div><div class="lbl">Foto</div></div>
+      <div class="stat"><div class="num" id="s-albums">0</div><div class="lbl">Album</div></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-carousel" id="hero-carousel"></div>
+    <div class="hero-overlay"><span class="hero-photo-label" id="hero-label">Koleksi Terbaru</span></div>
+    <div class="hero-dots" id="hero-dots"></div>
+  </div>
+</section>
+
+<!-- FILTER -->
+<div class="filter-bar" id="filter-bar"></div>
+
+<!-- GALLERY -->
+<section class="gallery-section" id="galeri">
+  <div class="section-header">
+    <h2 class="section-title">Koleksi<br/><span>Foto Saya</span></h2>
+    <div>
+      <p class="section-desc">Setiap kartu memiliki beberapa foto — geser atau klik panah untuk melihat semua.</p>
+      <p class="photo-count" id="photo-count"></p>
+    </div>
+  </div>
+  <div class="gallery-grid" id="gallery-grid"></div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-strip" id="tentang">
+  <div class="about-img"><img id="about-avatar" src="" alt=""/></div>
+  <div class="about-content">
+    <p class="about-eyebrow">Tentang Saya</p>
+    <h2 class="about-title" id="about-title">Halo…</h2>
+    <p class="about-body" id="about-bio"></p>
+    <div class="about-tags" id="about-tags"></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="kontak">
+  <h2 class="contact-title">Terhubung<br/>Dengan Saya</h2>
+  <p class="contact-sub">Punya pertanyaan atau ingin berkolaborasi? Hubungi saya.</p>
+  <div class="contact-links">
+    <a class="btn btn-primary" id="btn-email" href="#">Kirim Email</a>
+    <a class="btn btn-outline" id="btn-github" href="#" target="_blank">GitHub Saya</a>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-logo" id="footer-logo">…</span>
+  <span class="footer-copy">© 2024 · GitHub Pages</span>
+  <a class="footer-gh" id="footer-gh" href="#" target="_blank">github.com/…</a>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lb-close">×</button>
+  <div class="lb-inner">
+    <div class="lb-img-wrap">
+      <div class="lb-track" id="lb-track"></div>
+      <button class="lb-arrow lb-arrow-prev" id="lb-prev">‹</button>
+      <button class="lb-arrow lb-arrow-next" id="lb-next">›</button>
+    </div>
+    <div class="lb-thumbs" id="lb-thumbs"></div>
+    <div class="lb-caption">
+      <div class="lb-title" id="lb-title"></div>
+      <div class="lb-meta" id="lb-meta"></div>
+      <div class="lb-caption-text" id="lb-caption-text"></div>
+      <div class="lb-counter" id="lb-counter"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── STATE ─────────────────────────────────────────────
+let allCards = [];
+let filtered = [];
+let lbCard = null;
+let lbIdx = 0;
+
+// card carousels: { cardId: { idx, timer } }
+const cardState = {};
+
+// ─── LOAD ──────────────────────────────────────────────
+async function load() {
+  try {
+    const r = await fetch('photos.json?v=' + Date.now());
+    const data = await r.json();
+    render(data);
+  } catch(e) {
+    console.error(e);
+  }
+}
+
+// ─── RENDER ALL ────────────────────────────────────────
+function render(data) {
+  const { profile, albums, cards } = data;
+  allCards = cards;
+
+  // Profile
+  document.getElementById('nav-logo').textContent = profile.name;
+  document.getElementById('hero-name').textContent = profile.name;
+  document.getElementById('hero-tagline').textContent = profile.tagline;
+  document.getElementById('about-avatar').src = profile.avatar;
+  document.getElementById('about-title').innerHTML = `Halo, saya<br/>${profile.name}`;
+  document.getElementById('about-bio').textContent = profile.bio;
+  document.getElementById('footer-logo').textContent = profile.name;
+  document.getElementById('btn-email').href = `mailto:${profile.email}`;
+  document.getElementById('btn-github').href = `https://github.com/${profile.github}`;
+  document.getElementById('footer-gh').href = `https://github.com/${profile.github}`;
+  document.getElementById('footer-gh').textContent = `github.com/${profile.github}`;
+  document.getElementById('about-tags').innerHTML = profile.tags.map(t=>`<span class="tag">${t}</span>`).join('');
+
+  const totalPhotos = cards.reduce((s,c)=>s+c.photos.length,0);
+  document.getElementById('s-cards').textContent = cards.length;
+  document.getElementById('s-photos').textContent = totalPhotos;
+  document.getElementById('s-albums').textContent = albums.length - 1;
+
+  // Hero carousel from featured cards
+  buildHeroCarousel(cards.filter(c=>c.featured).flatMap(c=>c.photos.map(p=>({...p, cardTitle:c.title, cardMeta:c.meta}))));
+
+  // Filter
+  const fb = document.getElementById('filter-bar');
+  fb.innerHTML = albums.map((a,i)=>`<button class="filter-btn${i===0?' active':''}" data-id="${a.id}" onclick="setFilter('${a.id}',this)">${a.label}</button>`).join('');
+
+  renderGrid('semua');
+}
+
+// ─── HERO CAROUSEL ─────────────────────────────────────
+let heroIdx = 0, heroSlides = [], heroTimer;
+
+function buildHeroCarousel(slides) {
+  heroSlides = slides;
+  if (!slides.length) return;
+
+  const el = document.getElementById('hero-carousel');
+  el.innerHTML = slides.map((s,i)=>`
+    <div class="hero-slide${i===0?' active':''}">
+      <img src="${s.url}" alt="${s.caption||''}"/>
+    </div>
+  `).join('');
+
+  const dots = document.getElementById('hero-dots');
+  dots.innerHTML = slides.map((_,i)=>`<div class="hero-dot${i===0?' active':''}" onclick="goHero(${i})"></div>`).join('');
+
+  document.getElementById('hero-label').textContent = slides[0].cardTitle + ' — ' + slides[0].cardMeta;
+  heroTimer = setInterval(()=>goHero((heroIdx+1)%heroSlides.length), 4000);
+}
+
+function goHero(idx) {
+  heroIdx = idx;
+  document.querySelectorAll('.hero-slide').forEach((s,i)=>s.classList.toggle('active',i===idx));
+  document.querySelectorAll('.hero-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
+  const s = heroSlides[idx];
+  document.getElementById('hero-label').textContent = s.cardTitle + ' — ' + s.cardMeta;
+}
+
+// ─── GRID RENDER ───────────────────────────────────────
+function renderGrid(albumId) {
+  filtered = albumId === 'semua' ? allCards : allCards.filter(c=>c.album===albumId);
+  const grid = document.getElementById('gallery-grid');
+  const totalPh = filtered.reduce((s,c)=>s+c.photos.length,0);
+  document.getElementById('photo-count').textContent = filtered.length
+    ? `${filtered.length} momen · ${totalPh} foto`
+    : '';
+
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="empty-state">Belum ada foto di album ini.</div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map((card, ci) => {
+    const pCount = card.photos.length;
+    const slides = card.photos.map((p,pi)=>`
+      <div class="card-slide">
+        <img src="${p.url}" alt="${p.caption||card.title}" loading="lazy"/>
+      </div>`).join('');
+
+    const dots = pCount > 1 ? card.photos.map((_,pi)=>`
+      <div class="card-dot${pi===0?' active':''}" onclick="cardGo(event,${ci},${pi})"></div>`).join('') : '';
+
+    return `
+      <div class="gallery-card" id="gc-${ci}" onclick="openLightbox(${ci},0)">
+        <div class="card-track" id="ct-${ci}">${slides}</div>
+        ${pCount>1?`<button class="card-btn card-btn-prev" onclick="cardGo(event,${ci},-1)">&#8249;</button>`:''}
+        ${pCount>1?`<button class="card-btn card-btn-next" onclick="cardGo(event,${ci},1)">&#8250;</button>`:''}
+        ${pCount>1?`<div class="card-dots">${dots}</div>`:''}
+        ${card.featured?'<span class="featured-badge">★ Unggulan</span>':''}
+        ${pCount>1?`<span class="card-count-badge">${pCount} foto</span>`:''}
+        <div class="card-overlay">
+          <div class="card-title">${card.title}</div>
+          <div class="card-meta">${card.meta}</div>
+          <div class="card-caption" id="cc-${ci}">${card.photos[0].caption||''}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  // init state
+  filtered.forEach((_,ci) => {
+    cardState[ci] = { idx: 0 };
+    // auto-slide for multi-photo cards
+    if (filtered[ci].photos.length > 1) {
+      cardState[ci].timer = setInterval(()=>cardAutoNext(ci), 3500 + ci * 300);
+    }
+  });
+}
+
+function cardAutoNext(ci) {
+  const card = filtered[ci];
+  if (!card) return;
+  const next = (cardState[ci].idx + 1) % card.photos.length;
+  applyCardSlide(ci, next);
+}
+
+function cardGo(e, ci, dir) {
+  e.stopPropagation();
+  const card = filtered[ci];
+  let next;
+  if (dir === 1 || dir === -1) {
+    next = (cardState[ci].idx + dir + card.photos.length) % card.photos.length;
+  } else {
+    next = dir; // direct index
+  }
+  // reset timer
+  if (cardState[ci].timer) { clearInterval(cardState[ci].timer); cardState[ci].timer = null; }
+  applyCardSlide(ci, next);
+}
+
+function applyCardSlide(ci, next) {
+  const card = filtered[ci];
+  if (!card) return;
+  cardState[ci].idx = next;
+  const track = document.getElementById(`ct-${ci}`);
+  if (track) track.style.transform = `translateX(-${next*100}%)`;
+  // update dots
+  const dotsEl = document.querySelectorAll(`#gc-${ci} .card-dot`);
+  dotsEl.forEach((d,i)=>d.classList.toggle('active',i===next));
+  // update caption
+  const cap = document.getElementById(`cc-${ci}`);
+  if (cap) cap.textContent = card.photos[next].caption || '';
+}
+
+function setFilter(id, btn) {
+  // clear card timers
+  Object.values(cardState).forEach(s=>s.timer && clearInterval(s.timer));
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid(id);
+}
+
+// ─── LIGHTBOX ──────────────────────────────────────────
+function openLightbox(ci, startIdx) {
+  lbCard = filtered[ci];
+  lbIdx  = cardState[ci]?.idx ?? startIdx;
+  buildLightbox();
+  document.getElementById('lightbox').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function buildLightbox() {
+  const photos = lbCard.photos;
+
+  document.getElementById('lb-track').innerHTML = photos.map(p=>`
+    <div class="lb-slide"><img src="${p.url}" alt="${p.caption||''}"/></div>`).join('');
+
+  document.getElementById('lb-thumbs').innerHTML = photos.map((p,i)=>`
+    <img class="lb-thumb${i===lbIdx?' active':''}" src="${p.url}" onclick="lbGo(${i})" alt=""/>`).join('');
+
+  lbUpdateCaption();
+  lbApply();
+}
+
+function lbApply() {
+  const n = lbCard.photos.length;
+  document.getElementById('lb-track').style.transform = `translateX(-${lbIdx*100}%)`;
+  document.querySelectorAll('.lb-thumb').forEach((t,i)=>t.classList.toggle('active',i===lbIdx));
+  // scroll thumb into view
+  const thumb = document.querySelectorAll('.lb-thumb')[lbIdx];
+  if (thumb) thumb.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  lbUpdateCaption();
+}
+
+function lbUpdateCaption() {
+  const p = lbCard.photos[lbIdx];
+  document.getElementById('lb-title').textContent  = lbCard.title;
+  document.getElementById('lb-meta').textContent   = lbCard.meta;
+  document.getElementById('lb-caption-text').textContent = p.caption || '';
+  document.getElementById('lb-counter').textContent = `${lbIdx+1} / ${lbCard.photos.length}`;
+}
+
+function lbGo(idx) { lbIdx=idx; lbApply(); }
+function lbPrev()  { lbIdx=(lbIdx-1+lbCard.photos.length)%lbCard.photos.length; lbApply(); }
+function lbNext()  { lbIdx=(lbIdx+1)%lbCard.photos.length; lbApply(); }
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+  document.body.style.overflow='';
+}
+
+document.getElementById('lb-close').onclick = closeLightbox;
+document.getElementById('lb-prev').onclick   = lbPrev;
+document.getElementById('lb-next').onclick   = lbNext;
+document.getElementById('lightbox').onclick  = e=>{ if(e.target.id==='lightbox') closeLightbox(); };
+
+// swipe support on lightbox
+let tsX=0;
+document.getElementById('lb-track').addEventListener('touchstart',e=>{tsX=e.touches[0].clientX},{passive:true});
+document.getElementById('lb-track').addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tsX;
+  if(Math.abs(dx)>40){dx<0?lbNext():lbPrev()}
+},{passive:true});
+
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('lightbox').classList.contains('active')) return;
+  if(e.key==='Escape') closeLightbox();
+  if(e.key==='ArrowLeft') lbPrev();
+  if(e.key==='ArrowRight') lbNext();
+});
+
+// ─── START ─────────────────────────────────────────────
+load();
+</script>
+</body>
+</html>
