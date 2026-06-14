@@ -6,14 +6,34 @@
     "email": "email@anda.com",
     "github": "username-anda",
     "avatar": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=900&auto=format&fit=crop",
-    "tags": ["Fotografi", "Traveling", "Ternate", "Maluku Utara"]
+    "tags": [
+      "Fotografi",
+      "Traveling",
+      "Ternate",
+      "Maluku Utara"
+    ]
   },
   "albums": [
-    { "id": "semua",    "label": "Semua" },
-    { "id": "potret",   "label": "Potret" },
-    { "id": "traveling","label": "Traveling" },
-    { "id": "keluarga", "label": "Keluarga" },
-    { "id": "alam",     "label": "Alam" }
+    {
+      "id": "semua",
+      "label": "Semua"
+    },
+    {
+      "id": "ssbbw",
+      "label": "SSBBW"
+    },
+    {
+      "id": "actress",
+      "label": "Actress"
+    },
+    {
+      "id": "influencer",
+      "label": "Influencer"
+    },
+    {
+      "id": "people",
+      "label": "People"
+    }
   ],
   "cards": [
     {
@@ -23,9 +43,18 @@
       "album": "potret",
       "featured": true,
       "photos": [
-        { "url": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&auto=format&fit=crop", "caption": "Sesi studio utama" },
-        { "url": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=900&auto=format&fit=crop", "caption": "Pencahayaan dramatis" },
-        { "url": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=900&auto=format&fit=crop", "caption": "Close-up potret" }
+        {
+          "url": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&auto=format&fit=crop",
+          "caption": "Sesi studio utama"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=900&auto=format&fit=crop",
+          "caption": "Pencahayaan dramatis"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=900&auto=format&fit=crop",
+          "caption": "Close-up potret"
+        }
       ]
     },
     {
@@ -35,8 +64,14 @@
       "album": "potret",
       "featured": false,
       "photos": [
-        { "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=900&auto=format&fit=crop", "caption": "Santai di taman" },
-        { "url": "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=900&auto=format&fit=crop", "caption": "Golden hour" }
+        {
+          "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=900&auto=format&fit=crop",
+          "caption": "Santai di taman"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=900&auto=format&fit=crop",
+          "caption": "Golden hour"
+        }
       ]
     },
     {
@@ -46,10 +81,22 @@
       "album": "alam",
       "featured": false,
       "photos": [
-        { "url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900&auto=format&fit=crop", "caption": "Pantai biru jernih" },
-        { "url": "https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=900&auto=format&fit=crop", "caption": "Ombak senja" },
-        { "url": "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=900&auto=format&fit=crop", "caption": "Pasir putih" },
-        { "url": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&auto=format&fit=crop", "caption": "Sunrise di pantai" }
+        {
+          "url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900&auto=format&fit=crop",
+          "caption": "Pantai biru jernih"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=900&auto=format&fit=crop",
+          "caption": "Ombak senja"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=900&auto=format&fit=crop",
+          "caption": "Pasir putih"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&auto=format&fit=crop",
+          "caption": "Sunrise di pantai"
+        }
       ]
     },
     {
@@ -59,9 +106,18 @@
       "album": "alam",
       "featured": true,
       "photos": [
-        { "url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&auto=format&fit=crop", "caption": "Puncak Gamalama" },
-        { "url": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=900&auto=format&fit=crop", "caption": "Jalur pendakian" },
-        { "url": "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=900&auto=format&fit=crop", "caption": "Pemandangan dari atas" }
+        {
+          "url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&auto=format&fit=crop",
+          "caption": "Puncak Gamalama"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=900&auto=format&fit=crop",
+          "caption": "Jalur pendakian"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=900&auto=format&fit=crop",
+          "caption": "Pemandangan dari atas"
+        }
       ]
     },
     {
@@ -71,8 +127,14 @@
       "album": "keluarga",
       "featured": false,
       "photos": [
-        { "url": "https://images.unsplash.com/photo-1609220136736-443140cffec6?w=900&auto=format&fit=crop", "caption": "Momen bersama" },
-        { "url": "https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?w=900&auto=format&fit=crop", "caption": "Hari Lebaran" }
+        {
+          "url": "https://images.unsplash.com/photo-1609220136736-443140cffec6?w=900&auto=format&fit=crop",
+          "caption": "Momen bersama"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?w=900&auto=format&fit=crop",
+          "caption": "Hari Lebaran"
+        }
       ]
     },
     {
@@ -82,9 +144,18 @@
       "album": "potret",
       "featured": false,
       "photos": [
-        { "url": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=900&auto=format&fit=crop", "caption": "Hari wisuda" },
-        { "url": "https://images.unsplash.com/photo-1627556704302-624286467c65?w=900&auto=format&fit=crop", "caption": "Foto dengan toga" },
-        { "url": "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=900&auto=format&fit=crop", "caption": "Bersama keluarga" }
+        {
+          "url": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=900&auto=format&fit=crop",
+          "caption": "Hari wisuda"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1627556704302-624286467c65?w=900&auto=format&fit=crop",
+          "caption": "Foto dengan toga"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=900&auto=format&fit=crop",
+          "caption": "Bersama keluarga"
+        }
       ]
     },
     {
@@ -94,9 +165,51 @@
       "album": "traveling",
       "featured": false,
       "photos": [
-        { "url": "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=900&auto=format&fit=crop", "caption": "Kota Manado" },
-        { "url": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&auto=format&fit=crop", "caption": "Bunaken" },
-        { "url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=900&auto=format&fit=crop", "caption": "Kenangan perjalanan" }
+        {
+          "url": "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=900&auto=format&fit=crop",
+          "caption": "Kota Manado"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&auto=format&fit=crop",
+          "caption": "Bunaken"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=900&auto=format&fit=crop",
+          "caption": "Kenangan perjalanan"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Mary Bobbery (Gretel)",
+      "meta": "SSBBW Mary Bobbery",
+      "album": "ssbbw",
+      "featured": true,
+      "photos": [
+        {
+          "url": "SSBBW/Mary Bobbery/ChatGPT Image Jun 13, 2026, 11_02_26 PM.png",
+          "caption": "Gretel"
+        },
+        {
+          "url": "SSBBW/Mary Bobbery/MaryBoberry.jpg",
+          "caption": ""
+        },
+        {
+          "url": "SSBBW/Mary Bobbery/mary_boberry_on_a_spring_day_by_stillersrebecca_dkinbwf.jpg",
+          "caption": ""
+        },
+        {
+          "url": "SSBBW/Mary Bobbery/C91w90RVoAAV1XL.jpg",
+          "caption": ""
+        },
+        {
+          "url": "SSBBW/Mary Bobbery/C6ZZf-DVAAIfRNw.jpg",
+          "caption": ""
+        },
+        {
+          "url": "SSBBW/Mary Bobbery/1767334610552.jpeg",
+          "caption": ""
+        }
       ]
     }
   ]
