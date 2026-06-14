@@ -1,0 +1,103 @@
+{
+  "profile": {
+    "name": "Nama Anda",
+    "tagline": "Setiap foto menyimpan cerita yang tak terlupakan.",
+    "bio": "Saya berasal dari Ternate, Maluku Utara. Galeri ini adalah ruang pribadi saya untuk berbagi momen-momen berharga — dari perjalanan, keluarga, hingga pencapaian.",
+    "email": "email@anda.com",
+    "github": "username-anda",
+    "avatar": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=900&auto=format&fit=crop",
+    "tags": ["Fotografi", "Traveling", "Ternate", "Maluku Utara"]
+  },
+  "albums": [
+    { "id": "semua",    "label": "Semua" },
+    { "id": "potret",   "label": "Potret" },
+    { "id": "traveling","label": "Traveling" },
+    { "id": "keluarga", "label": "Keluarga" },
+    { "id": "alam",     "label": "Alam" }
+  ],
+  "cards": [
+    {
+      "id": 1,
+      "title": "Potret Formal",
+      "meta": "2024 · Studio",
+      "album": "potret",
+      "featured": true,
+      "photos": [
+        { "url": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&auto=format&fit=crop", "caption": "Sesi studio utama" },
+        { "url": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=900&auto=format&fit=crop", "caption": "Pencahayaan dramatis" },
+        { "url": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=900&auto=format&fit=crop", "caption": "Close-up potret" }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Casual Outdoor",
+      "meta": "2023 · Taman Kota",
+      "album": "potret",
+      "featured": false,
+      "photos": [
+        { "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=900&auto=format&fit=crop", "caption": "Santai di taman" },
+        { "url": "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=900&auto=format&fit=crop", "caption": "Golden hour" }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Pantai Maluku",
+      "meta": "2023 · Ternate",
+      "album": "alam",
+      "featured": false,
+      "photos": [
+        { "url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900&auto=format&fit=crop", "caption": "Pantai biru jernih" },
+        { "url": "https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=900&auto=format&fit=crop", "caption": "Ombak senja" },
+        { "url": "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=900&auto=format&fit=crop", "caption": "Pasir putih" },
+        { "url": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&auto=format&fit=crop", "caption": "Sunrise di pantai" }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Gunung Gamalama",
+      "meta": "2023 · Ternate",
+      "album": "alam",
+      "featured": true,
+      "photos": [
+        { "url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&auto=format&fit=crop", "caption": "Puncak Gamalama" },
+        { "url": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=900&auto=format&fit=crop", "caption": "Jalur pendakian" },
+        { "url": "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=900&auto=format&fit=crop", "caption": "Pemandangan dari atas" }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Foto Keluarga",
+      "meta": "2022 · Rumah",
+      "album": "keluarga",
+      "featured": false,
+      "photos": [
+        { "url": "https://images.unsplash.com/photo-1609220136736-443140cffec6?w=900&auto=format&fit=crop", "caption": "Momen bersama" },
+        { "url": "https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?w=900&auto=format&fit=crop", "caption": "Hari Lebaran" }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Wisuda",
+      "meta": "2022 · Universitas",
+      "album": "potret",
+      "featured": false,
+      "photos": [
+        { "url": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=900&auto=format&fit=crop", "caption": "Hari wisuda" },
+        { "url": "https://images.unsplash.com/photo-1627556704302-624286467c65?w=900&auto=format&fit=crop", "caption": "Foto dengan toga" },
+        { "url": "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=900&auto=format&fit=crop", "caption": "Bersama keluarga" }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Traveling Sulawesi",
+      "meta": "2021 · Manado",
+      "album": "traveling",
+      "featured": false,
+      "photos": [
+        { "url": "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=900&auto=format&fit=crop", "caption": "Kota Manado" },
+        { "url": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&auto=format&fit=crop", "caption": "Bunaken" },
+        { "url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=900&auto=format&fit=crop", "caption": "Kenangan perjalanan" }
+      ]
+    }
+  ]
+}
