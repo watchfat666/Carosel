@@ -146,46 +146,124 @@
     .btn-outline:hover{background:var(--ink);color:var(--warm)}
 
     /* ── LIGHTBOX ── */
-    .lightbox{position:fixed;inset:0;z-index:9999;background:rgba(10,8,6,.97);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .35s}
+    /*
+      Grid layout (3 rows):
+        [topbar]   auto
+        [middle]   1fr   ← image + arrows fill this
+        [bottom]   auto
+    */
+    .lightbox{
+      position:fixed;inset:0;z-index:9999;
+      background:rgba(10,8,6,.97);
+      opacity:0;pointer-events:none;transition:opacity .35s;
+      display:grid;
+      grid-template-rows:auto 1fr auto;
+    }
     .lightbox.active{opacity:1;pointer-events:all}
 
-    .lb-inner{position:relative;width:90vw;max-width:1100px;display:flex;flex-direction:column;align-items:center;gap:20px}
-
-    /* Main image area */
-    .lb-img-wrap{position:relative;width:100%;overflow:hidden}
-    .lb-track{display:flex;transition:transform .45s cubic-bezier(.4,0,.2,1)}
-    .lb-slide{min-width:100%;display:flex;justify-content:center}
-    .lb-slide img{max-height:72vh;max-width:100%;object-fit:contain;display:block;user-select:none}
-
-    /* Lightbox arrows */
-    .lb-arrow{
-      position:absolute;top:50%;transform:translateY(-50%);
-      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
-      color:rgba(255,255,255,.8);font-size:28px;width:48px;height:56px;
-      display:flex;align-items:center;justify-content:center;
-      cursor:pointer;transition:all .2s;z-index:10;
+    /* ── Top bar ── */
+    .lb-topbar{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:16px 24px;
+      border-bottom:1px solid rgba(255,255,255,.06);
     }
-    .lb-arrow:hover{background:rgba(201,169,110,.25);border-color:var(--gold);color:var(--gold)}
-    .lb-arrow-prev{left:-60px}
-    .lb-arrow-next{right:-60px}
+    .lb-title{font-family:'Playfair Display',serif;font-size:17px;color:var(--warm);line-height:1.2}
+    .lb-meta{font-size:11px;letter-spacing:1.5px;color:var(--gold);margin-top:2px}
+    .lb-close{
+      background:none;border:1px solid rgba(255,255,255,.15);
+      color:rgba(255,255,255,.6);font-size:20px;
+      width:38px;height:38px;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;flex-shrink:0;transition:all .2s;
+    }
+    .lb-close:hover{border-color:var(--gold);color:var(--gold)}
 
-    /* Thumbnails strip */
-    .lb-thumbs{display:flex;gap:8px;overflow-x:auto;padding:4px 0;max-width:100%;scrollbar-width:thin;scrollbar-color:var(--gold) transparent}
+    /* ── Middle row: [arrow][image-viewport][arrow] ── */
+    .lb-middle{
+      display:grid;
+      grid-template-columns:64px 1fr 64px;
+      /* row fills the 1fr leftover height */
+      min-height:0;           /* critical: lets it shrink inside grid */
+      overflow:hidden;
+    }
+
+    /* Navigation arrows — full-height columns beside the viewport */
+    .lb-arrow{
+      display:flex;align-items:center;justify-content:center;
+      background:none;border:none;
+      color:rgba(255,255,255,.4);
+      font-size:40px;line-height:1;
+      cursor:pointer;
+      transition:color .2s,background .2s;
+      user-select:none;
+    }
+    .lb-arrow:hover{color:var(--gold);background:rgba(201,169,110,.06)}
+    .lb-arrow:disabled{opacity:.12;cursor:default;pointer-events:none}
+
+    /* Image viewport: clips the horizontal slide strip */
+    .lb-img-wrap{
+      overflow:hidden;          /* only this clips — arrows are outside */
+      position:relative;
+      min-width:0;
+    }
+
+    /* Slide strip */
+    .lb-track{
+      display:flex;
+      height:100%;
+      will-change:transform;
+      transition:transform .42s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* Each slide: full size of viewport, centers its image */
+    .lb-slide{
+      flex:0 0 100%;           /* exactly viewport width, no shrink/grow */
+      width:100%;height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-sizing:border-box;
+      padding:12px;
+    }
+
+    /* Image: never exceed the slide cell, always centered */
+    .lb-slide img{
+      display:block;
+      max-width:100%;
+      max-height:100%;
+      width:auto;
+      height:auto;
+      object-fit:contain;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+
+    /* ── Bottom bar: thumbs + info ── */
+    .lb-bottom{
+      display:flex;flex-direction:column;align-items:center;gap:8px;
+      padding:10px 24px 16px;
+      border-top:1px solid rgba(255,255,255,.06);
+    }
+    .lb-thumbs{
+      display:flex;gap:6px;
+      overflow-x:auto;padding:2px 0;
+      max-width:min(100%,680px);
+      scrollbar-width:thin;scrollbar-color:var(--gold) transparent;
+    }
     .lb-thumbs::-webkit-scrollbar{height:3px}
     .lb-thumbs::-webkit-scrollbar-thumb{background:var(--gold)}
-    .lb-thumb{width:64px;height:48px;object-fit:cover;cursor:pointer;opacity:.45;border:2px solid transparent;transition:all .25s;flex-shrink:0}
+    .lb-thumb{
+      width:56px;height:42px;
+      object-fit:cover;flex-shrink:0;
+      cursor:pointer;opacity:.35;
+      border:2px solid transparent;
+      transition:opacity .22s,border-color .22s;
+    }
+    .lb-thumb:hover{opacity:.7}
     .lb-thumb.active{opacity:1;border-color:var(--gold)}
-
-    /* Caption + meta */
-    .lb-caption{text-align:center;color:var(--sand)}
-    .lb-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--warm);margin-bottom:4px}
-    .lb-meta{font-size:12px;letter-spacing:1px;color:var(--gold)}
-    .lb-caption-text{font-size:13px;color:var(--muted);margin-top:4px;min-height:18px}
-    .lb-counter{font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:6px}
-
-    /* Close */
-    .lb-close{position:fixed;top:24px;right:32px;font-size:34px;color:var(--sand);cursor:pointer;background:none;border:none;line-height:1;transition:color .2s;z-index:10001}
-    .lb-close:hover{color:var(--gold)}
+    .lb-info{display:flex;align-items:center;gap:20px}
+    .lb-caption-text{font-size:13px;color:var(--sand)}
+    .lb-counter{font-size:11px;color:var(--muted);letter-spacing:1.5px;white-space:nowrap}
 
     /* ── FOOTER ── */
     footer{background:var(--ink);padding:36px 60px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(212,196,176,.1)}
@@ -290,23 +368,36 @@
   <a class="footer-gh" id="footer-gh" href="#" target="_blank">github.com/…</a>
 </footer>
 
-<!-- LIGHTBOX -->
+<!-- LIGHTBOX — CSS Grid: topbar / middle(arrow·viewport·arrow) / bottom -->
 <div class="lightbox" id="lightbox">
-  <button class="lb-close" id="lb-close">×</button>
-  <div class="lb-inner">
-    <div class="lb-img-wrap">
-      <div class="lb-track" id="lb-track"></div>
-      <button class="lb-arrow lb-arrow-prev" id="lb-prev">‹</button>
-      <button class="lb-arrow lb-arrow-next" id="lb-next">›</button>
-    </div>
-    <div class="lb-thumbs" id="lb-thumbs"></div>
-    <div class="lb-caption">
+
+  <!-- ROW 1: title + close -->
+  <div class="lb-topbar">
+    <div>
       <div class="lb-title" id="lb-title"></div>
-      <div class="lb-meta" id="lb-meta"></div>
-      <div class="lb-caption-text" id="lb-caption-text"></div>
-      <div class="lb-counter" id="lb-counter"></div>
+      <div class="lb-meta"  id="lb-meta"></div>
+    </div>
+    <button class="lb-close" id="lb-close">×</button>
+  </div>
+
+  <!-- ROW 2: prev / image-strip / next -->
+  <div class="lb-middle">
+    <button class="lb-arrow" id="lb-prev">&#8249;</button>
+    <div class="lb-img-wrap" id="lb-img-wrap">
+      <div class="lb-track" id="lb-track"></div>
+    </div>
+    <button class="lb-arrow" id="lb-next">&#8250;</button>
+  </div>
+
+  <!-- ROW 3: thumbnails + caption + counter -->
+  <div class="lb-bottom">
+    <div class="lb-thumbs" id="lb-thumbs"></div>
+    <div class="lb-info">
+      <span class="lb-caption-text" id="lb-caption-text"></span>
+      <span class="lb-counter"      id="lb-counter"></span>
     </div>
   </div>
+
 </div>
 
 <script>
@@ -487,72 +578,136 @@ function setFilter(id, btn) {
 }
 
 // ─── LIGHTBOX ──────────────────────────────────────────
+// Cache DOM refs once
+const lbEl       = document.getElementById('lightbox');
+const lbTrackEl  = document.getElementById('lb-track');
+const lbWrapEl   = document.getElementById('lb-img-wrap');
+const lbThumbsEl = document.getElementById('lb-thumbs');
+const lbTitleEl  = document.getElementById('lb-title');
+const lbMetaEl   = document.getElementById('lb-meta');
+const lbCapEl    = document.getElementById('lb-caption-text');
+const lbCntEl    = document.getElementById('lb-counter');
+const lbPrevEl   = document.getElementById('lb-prev');
+const lbNextEl   = document.getElementById('lb-next');
+const lbCloseEl  = document.getElementById('lb-close');
+
 function openLightbox(ci, startIdx) {
   lbCard = filtered[ci];
-  lbIdx  = cardState[ci]?.idx ?? startIdx;
+  lbIdx  = cardState[ci]?.idx ?? startIdx ?? 0;
   buildLightbox();
-  document.getElementById('lightbox').classList.add('active');
+  lbEl.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
 
 function buildLightbox() {
   const photos = lbCard.photos;
 
-  document.getElementById('lb-track').innerHTML = photos.map(p=>`
-    <div class="lb-slide"><img src="${p.url}" alt="${p.caption||''}"/></div>`).join('');
+  // Build slides — each slide is exactly one viewport wide
+  lbTrackEl.innerHTML = photos.map(p => `
+    <div class="lb-slide">
+      <img src="${p.url}" alt="${p.caption || lbCard.title}" loading="lazy"/>
+    </div>`).join('');
 
-  document.getElementById('lb-thumbs').innerHTML = photos.map((p,i)=>`
-    <img class="lb-thumb${i===lbIdx?' active':''}" src="${p.url}" onclick="lbGo(${i})" alt=""/>`).join('');
+  // Build thumbnails
+  lbThumbsEl.innerHTML = photos.map((p, i) => `
+    <img class="lb-thumb" src="${p.url}" alt="" onclick="lbGo(${i})" loading="lazy"/>`).join('');
 
-  lbUpdateCaption();
-  lbApply();
+  // Update arrow visibility
+  lbUpdateArrows();
+
+  // Apply position immediately (no transition on first render)
+  lbTrackEl.style.transition = 'none';
+  lbApplyTransform();
+  // re-enable transition after first paint
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      lbTrackEl.style.transition = 'transform .42s cubic-bezier(.4,0,.2,1)';
+    });
+  });
+
+  lbUpdateMeta();
+  lbUpdateThumbs();
 }
+
+// ── Core: move track by pixel offset of the viewport width ──
+// Using offsetWidth (actual rendered px) so huge images never affect slide position
+function lbApplyTransform() {
+  const vpWidth = lbWrapEl.offsetWidth;  // real px width of the clip viewport
+  lbTrackEl.style.transform = `translateX(${-lbIdx * vpWidth}px)`;
+}
+
+// Re-apply on window resize so position stays correct if viewport changes
+window.addEventListener('resize', () => {
+  if (!lbEl.classList.contains('active')) return;
+  lbTrackEl.style.transition = 'none';
+  lbApplyTransform();
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    lbTrackEl.style.transition = 'transform .42s cubic-bezier(.4,0,.2,1)';
+  }));
+});
 
 function lbApply() {
+  lbApplyTransform();
+  lbUpdateArrows();
+  lbUpdateMeta();
+  lbUpdateThumbs();
+}
+
+function lbUpdateArrows() {
   const n = lbCard.photos.length;
-  document.getElementById('lb-track').style.transform = `translateX(-${lbIdx*100}%)`;
-  document.querySelectorAll('.lb-thumb').forEach((t,i)=>t.classList.toggle('active',i===lbIdx));
-  // scroll thumb into view
-  const thumb = document.querySelectorAll('.lb-thumb')[lbIdx];
-  if (thumb) thumb.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
-  lbUpdateCaption();
+  // Always show prev/next (loop), just dim at edges for single-photo
+  lbPrevEl.disabled = n <= 1;
+  lbNextEl.disabled = n <= 1;
 }
 
-function lbUpdateCaption() {
+function lbUpdateMeta() {
   const p = lbCard.photos[lbIdx];
-  document.getElementById('lb-title').textContent  = lbCard.title;
-  document.getElementById('lb-meta').textContent   = lbCard.meta;
-  document.getElementById('lb-caption-text').textContent = p.caption || '';
-  document.getElementById('lb-counter').textContent = `${lbIdx+1} / ${lbCard.photos.length}`;
+  lbTitleEl.textContent = lbCard.title;
+  lbMetaEl.textContent  = lbCard.meta;
+  lbCapEl.textContent   = p.caption || '';
+  lbCntEl.textContent   = lbCard.photos.length > 1
+    ? `${lbIdx + 1} / ${lbCard.photos.length}`
+    : '';
 }
 
-function lbGo(idx) { lbIdx=idx; lbApply(); }
-function lbPrev()  { lbIdx=(lbIdx-1+lbCard.photos.length)%lbCard.photos.length; lbApply(); }
-function lbNext()  { lbIdx=(lbIdx+1)%lbCard.photos.length; lbApply(); }
+function lbUpdateThumbs() {
+  document.querySelectorAll('.lb-thumb').forEach((t, i) =>
+    t.classList.toggle('active', i === lbIdx));
+  const active = document.querySelectorAll('.lb-thumb')[lbIdx];
+  if (active) active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+}
+
+function lbGo(idx) {
+  lbIdx = ((idx % lbCard.photos.length) + lbCard.photos.length) % lbCard.photos.length;
+  lbApply();
+}
+function lbPrev() { lbGo(lbIdx - 1); }
+function lbNext() { lbGo(lbIdx + 1); }
 
 function closeLightbox() {
-  document.getElementById('lightbox').classList.remove('active');
-  document.body.style.overflow='';
+  lbEl.classList.remove('active');
+  document.body.style.overflow = '';
 }
 
-document.getElementById('lb-close').onclick = closeLightbox;
-document.getElementById('lb-prev').onclick   = lbPrev;
-document.getElementById('lb-next').onclick   = lbNext;
-document.getElementById('lightbox').onclick  = e=>{ if(e.target.id==='lightbox') closeLightbox(); };
+lbCloseEl.onclick = closeLightbox;
+lbPrevEl.onclick  = lbPrev;
+lbNextEl.onclick  = lbNext;
+lbEl.onclick = e => { if (e.target === lbEl) closeLightbox(); };
 
-// swipe support on lightbox
-let tsX=0;
-document.getElementById('lb-track').addEventListener('touchstart',e=>{tsX=e.touches[0].clientX},{passive:true});
-document.getElementById('lb-track').addEventListener('touchend',e=>{
-  const dx=e.changedTouches[0].clientX-tsX;
-  if(Math.abs(dx)>40){dx<0?lbNext():lbPrev()}
-},{passive:true});
+// Swipe on mobile
+let tsX = 0;
+lbTrackEl.addEventListener('touchstart', e => { tsX = e.touches[0].clientX; }, { passive: true });
+lbTrackEl.addEventListener('touchend',   e => {
+  const dx = e.changedTouches[0].clientX - tsX;
+  if (Math.abs(dx) > 40) { dx < 0 ? lbNext() : lbPrev(); }
+}, { passive: true });
 
-document.addEventListener('keydown',e=>{
-  if(!document.getElementById('lightbox').classList.contains('active')) return;
-  if(e.key==='Escape') closeLightbox();
-  if(e.key==='ArrowLeft') lbPrev();
-  if(e.key==='ArrowRight') lbNext();
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (!lbEl.classList.contains('active')) return;
+  if (e.key === 'Escape')     closeLightbox();
+  if (e.key === 'ArrowLeft')  lbPrev();
+  if (e.key === 'ArrowRight') lbNext();
 });
 
 // ─── START ─────────────────────────────────────────────
